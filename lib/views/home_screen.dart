@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mini: true,
           heroTag: "open drawer",
           onPressed: () { 
-            _scaffoldKey.currentState.openDrawer();
+            //_scaffoldKey.currentState.openDrawer();
           }, 
         ),
         Expanded(
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             setState(() => Consts.geladeiraAberta = !Consts.geladeiraAberta);
           },
-          label: Text("Fechar"),
+          label: Text(Consts.geladeiraAberta? "Fechar" : "  Abrir "),
         ),
       ],
     );
