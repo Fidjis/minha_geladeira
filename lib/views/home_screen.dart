@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:minha_geladeira/helpers/Consts.dart';
+import 'package:minha_geladeira/widgets/geladeira_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,10 +23,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _buildBody() => Padding(
-    padding: EdgeInsets.fromLTRB(25.0, 50.0, 25.0, 25.0),
+    padding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 25.0),
     child: Column(
+      mainAxisSize: MainAxisSize.max,
       children: [
-        _buildGeladeiraMenu(),
+        Padding(
+          padding: EdgeInsets.only(left: 40.0, right: 40.0),
+          child: _buildGeladeiraMenu(),
+        ),
+        //_buildGeladeiraMenu(),
+        //SizedBox(height: 10),
+        Container(
+          margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+          color: Colors.white,
+          height: 1.5, 
+          width: MediaQuery.of(context).size.width / 2,
+        ),
+        Flexible(
+          child: GeladeiraWidget(),
+        ),
       ],
     ),
   );
@@ -35,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         FloatingActionButton(
           child: Icon(Icons.menu),
           mini: true,
-          heroTag: "open menu",
+          heroTag: "open drawer",
           onPressed: () { 
             _scaffoldKey.currentState.openDrawer();
           }, 
@@ -50,14 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
           mini: true,
           heroTag: "add item",
           onPressed: () { 
-
-          }, 
+            
+          },
         ),
         FloatingActionButton.extended(
           heroTag: "fab fechar",
-          onPressed: () { 
-
-          }, 
+          onPressed: () {
+            setState(() => Consts.geladeiraAberta = !Consts.geladeiraAberta);
+          },
           label: Text("Fechar"),
         ),
       ],
@@ -66,11 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildDrawer() {
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(

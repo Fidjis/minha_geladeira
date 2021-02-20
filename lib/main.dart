@@ -12,7 +12,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Minha Geladeira',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        floatingActionButtonTheme: new FloatingActionButtonThemeData(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black
+        ),
+        // textTheme: TextTheme(
+        //   bodyText1: TextStyle(),
+        //   bodyText2: TextStyle(),
+        // ).apply(
+        //   bodyColor: Colors.black, 
+        //   displayColor: Colors.black, 
+        // ),
+        scaffoldBackgroundColor: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(),
