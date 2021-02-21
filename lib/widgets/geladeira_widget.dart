@@ -1,7 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:minha_geladeira/helpers/Consts.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:minha_geladeira/helpers/consts.dart';
+import 'package:minha_geladeira/stores/principal_store.dart';
 import 'package:minha_geladeira/widgets/bag_message_icon_widget.dart';
 
 class GeladeiraWidget extends StatefulWidget {
@@ -11,56 +11,69 @@ class GeladeiraWidget extends StatefulWidget {
 
 class _GeladeiraWidgetState extends State<GeladeiraWidget> {
 
-  Timer _timer;
-  // bool showFirst = true;
-  bool showFirst = false;
+  final principalStore = PrincipalSt();
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _buildParteInterna(),
-        GestureDetector(
-          child: _buildPortas(context),
-          onTap: () {
-            setState((){
-              Consts.geladeiraAberta = !Consts.geladeiraAberta;
-              showFirst = !showFirst;
-            });
-          },
-        ),
-        Align(
-          alignment: FractionalOffset.topCenter,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.45, 
-              top: MediaQuery.of(context).size.height * 0.17
-            ),
-            child: AnimatedOpacity(
-              opacity: showFirst  ? 0 : 1,// certo >>>> Consts.geladeiraAberta ? 0 : 1,
-              duration: Duration(milliseconds: 300),
-              child: Icon(Icons.free_breakfast, color: Colors.blue.withOpacity(0.4),),
-            ),
+    return Observer(
+      builder: (_) => Stack(
+        children: [
+          _buildParteInterna(),
+          GestureDetector(
+            child: _buildPortas(context),
+            onTap: () {
+              abrirOuFecharPorta();
+            },
           ),
-        ),
-        Align(
-          alignment: FractionalOffset.topCenter,
-          child: Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
-            child: AnimatedOpacity(
-              opacity: showFirst  ? 0 : 1,// certo >>>> Consts.geladeiraAberta ? 0 : 1,
-              duration: Duration(milliseconds: 300),
-              child: GestureDetector(
-                child: BagIconWidget(icon: Icon(Icons.donut_large_rounded, color: Colors.blue.withOpacity(0.4),)),
-                onTap: () {
-                  setState(() => Consts.geladeiraAberta = !Consts.geladeiraAberta);
-                },
-              ),
-            ),
-          ),
-        )
-      ],
+          _buildAdesivo(context),
+          _builFechadura(context)
+        ],
+      ),
     );
+  }
+
+  _builFechadura(BuildContext context) {
+    return Align(
+      alignment: FractionalOffset.topCenter,
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
+        child: AnimatedOpacity(
+          opacity: principalStore.geladeiraAberta ? 0 : 1,
+          duration: Duration(milliseconds: 300),
+          child: GestureDetector(
+            child: BagIconWidget(icon: Icon(Icons.donut_large_rounded, color: Colors.blue.withOpacity(0.4),)),
+            onTap: () {
+              if(!principalStore.geladeiraAberta)
+                abrirOuFecharPorta();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildAdesivo(BuildContext context) {
+    return Align(
+      alignment: FractionalOffset.topCenter,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * 0.45, 
+          top: MediaQuery.of(context).size.height * 0.17
+        ),
+        child: AnimatedOpacity(
+          opacity: principalStore.geladeiraAberta ? 0 : 1,
+          duration: Duration(milliseconds: 300),
+          child: Icon(Icons.free_breakfast, color: Colors.blue.withOpacity(0.4),),
+        ),
+      ),
+    );
+  }
+
+  void abrirOuFecharPorta() {
+    if(principalStore.geladeiraAberta)
+      principalStore.fecharGeladeira();
+    else
+      principalStore.abrirGeladeira();
   }
 
   _buildPortas(BuildContext context) {
@@ -74,7 +87,7 @@ class _GeladeiraWidgetState extends State<GeladeiraWidget> {
                 child: AnimatedContainer(
                   duration: const Duration(seconds: 1),
                   curve: Curves.bounceOut,
-                  width: Consts.geladeiraAberta ? 30 : MediaQuery.of(context).size.width,
+                  width: principalStore.geladeiraAberta ? 30 : MediaQuery.of(context).size.width,
                   child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
@@ -102,7 +115,7 @@ class _GeladeiraWidgetState extends State<GeladeiraWidget> {
                 child: AnimatedContainer(
                   duration: const Duration(seconds: 1),
                   curve: Curves.bounceOut,
-                  width: Consts.geladeiraAberta ? 30 : MediaQuery.of(context).size.width,
+                  width: principalStore.geladeiraAberta ? 30 : MediaQuery.of(context).size.width,
                   child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(

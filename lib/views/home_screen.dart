@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minha_geladeira/helpers/Consts.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:minha_geladeira/stores/principal_store.dart';
 import 'package:minha_geladeira/widgets/geladeira_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,14 +11,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final principalStore = PrincipalSt();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: _buildDrawer(),
-        body: _buildBody(),
+    return Observer(
+      builder: (_) => SafeArea(
+        child: Scaffold(
+          key: _scaffoldKey,
+          drawer: _buildDrawer(),
+          body: _buildBody(),
+        )
       )
     );
   }
@@ -62,6 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
             alignment: Alignment.center,
           ),
         ),
+        AnimatedOpacity(
+          opacity: principalStore.geladeiraAberta ? 1 : 0,
+          duration: Duration(milliseconds: 300),
+          child: FloatingActionButton.extended(
+            heroTag: "fab fechar",
+            onPressed: () => principalStore.fecharGeladeira(),
+            label: Text("Fechar"),
+          ),
+        ),
         FloatingActionButton(
           child: Icon(Icons.add_shopping_cart),
           mini: true,
@@ -69,13 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () { 
             
           },
-        ),
-        FloatingActionButton.extended(
-          heroTag: "fab fechar",
-          onPressed: () {
-            setState(() => Consts.geladeiraAberta = !Consts.geladeiraAberta);
-          },
-          label: Text(Consts.geladeiraAberta? "Fechar" : "  Abrir "),
         ),
       ],
     );
