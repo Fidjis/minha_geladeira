@@ -4,6 +4,8 @@ import 'package:minha_geladeira/helpers/consts.dart';
 import 'package:minha_geladeira/stores/principal_store.dart';
 import 'package:minha_geladeira/widgets/bag_message_icon_widget.dart';
 
+import 'freezer_widget.dart';
+
 class GeladeiraWidget extends StatefulWidget {
   @override
   _GeladeiraWidgetState createState() => _GeladeiraWidgetState();
@@ -146,7 +148,13 @@ class _GeladeiraWidgetState extends State<GeladeiraWidget> {
           width: 15,
         ),
       ),
-      child: Container(),
+      child: FreezerWidget(),
+      // child: Container(
+      //   alignment: Alignment.topCenter,
+      //   margin: EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 15.0),
+      //   height: MediaQuery.of(context).size.height,
+      //   child: ExpandedTile()
+      // ),
     );
   }
 }
