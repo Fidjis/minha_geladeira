@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:minha_geladeira/helpers/consts.dart';
 import 'package:minha_geladeira/stores/principal_store.dart';
 import 'package:minha_geladeira/widgets/bag_message_icon_widget.dart';
 
@@ -21,6 +20,7 @@ class _GeladeiraWidgetState extends State<GeladeiraWidget> {
       builder: (_) => Stack(
         children: [
           _buildParteInterna(),
+          _buildBorracha(context),
           GestureDetector(
             child: _buildPortas(context),
             onTap: () {
@@ -31,6 +31,22 @@ class _GeladeiraWidgetState extends State<GeladeiraWidget> {
           _builFechadura(context)
         ],
       ),
+    );
+  }
+
+  _buildBorracha(BuildContext context) {
+    return Align(
+      alignment: FractionalOffset.center,
+      child: AnimatedOpacity(
+        opacity: principalStore.geladeiraAberta ? 0 : 1,
+        duration: Duration(milliseconds: 300),
+        child: Container(
+          margin: EdgeInsets.all(15),
+          color: Colors.white, 
+          width: 30, 
+          height: MediaQuery.of(context).size.height
+        ),
+      )
     );
   }
 
@@ -141,20 +157,15 @@ class _GeladeiraWidgetState extends State<GeladeiraWidget> {
 
   _buildParteInterna() {
     return Card(
+      color: Colors.grey[300],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(80.0),
-        side: BorderSide(
-          color: Colors.grey.withOpacity(0.2),
-          width: 15,
-        ),
+        // side: BorderSide(
+        //   color: Colors.grey.withOpacity(0.2),
+        //   width: 15,
+        // ),
       ),
       child: FreezerWidget(),
-      // child: Container(
-      //   alignment: Alignment.topCenter,
-      //   margin: EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 15.0),
-      //   height: MediaQuery.of(context).size.height,
-      //   child: ExpandedTile()
-      // ),
     );
   }
 }

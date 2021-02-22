@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class BagIcon extends StatefulWidget {
 
-  final Icon icon;
+  final String assetUrl;
+  final int quantidade;
 
-  BagIcon({Key key, this.icon}) : super(key: key);
+  BagIcon({@required this.assetUrl, @required this.quantidade});
 
   @override
   _BagIconState createState() => _BagIconState();
@@ -12,31 +13,14 @@ class BagIcon extends StatefulWidget {
 
 class _BagIconState extends State<BagIcon> {
 
-  int counter = 1;
-
   @override
   Widget build(BuildContext context) {
     return Stack( children: <Widget>[
-        // IconButton(icon: widget.icon, onPressed: () {
-        //   setState(() {
-        //     counter++;
-        //   });
-        // }),
-        Container(
-          padding: EdgeInsets.all(4.0),
-          child: GestureDetector(
-            onTap: () {
-             setState(() {
-               counter++;
-             });
-            },
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: widget.icon,
-            ),
-          ),
+        CircleAvatar(
+          backgroundColor: Colors.white,
+          child: Image.asset( widget.assetUrl)//widget.icon,
         ),
-        counter != 0 ? new Positioned(
+        widget.quantidade != 0 ? Positioned(
           right: 0,
           top: 0,
           child: new Container(
@@ -50,16 +34,16 @@ class _BagIconState extends State<BagIcon> {
               minHeight: 14,
             ),
             child: Text(
-              '$counter',
+              widget.quantidade.toString(),
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 8,
+                fontSize: 15,
               ),
               textAlign: TextAlign.center,
             ),
           ),
-        ) : new Container()
+        ) : Container()
       ],
-    );
+    ) ;
   }
 }
