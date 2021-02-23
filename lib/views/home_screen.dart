@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:minha_geladeira/stores/principal_store.dart';
+import 'package:minha_geladeira/views/historico_screen.dart';
+import 'package:minha_geladeira/views/top_five_screen.dart';
 import 'package:minha_geladeira/widgets/geladeira_widget.dart';
+import 'package:minha_geladeira/widgets/novo_item_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,12 +21,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Observer(
       builder: (_) => SafeArea(
         child: Scaffold(
-          key: _scaffoldKey,
           drawer: _buildDrawer(),
+          key: _scaffoldKey,
           body: _buildBody(),
         )
       )
     );
+  }
+
+  showNovoItemDialog() {
+    Navigator.of(context).push(new PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (BuildContext context, _, __) {
+        return new NovoItemDialog();
+      },
+      fullscreenDialog: true
+    ));
   }
 
   _buildBody() => Padding(
@@ -35,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.only(left: 40.0, right: 40.0),
           child: _buildGeladeiraMenu(),
         ),
-        //_buildGeladeiraMenu(),
-        //SizedBox(height: 10),
         Container(
           margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
           color: Colors.white,
@@ -58,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mini: true,
           heroTag: "open drawer",
           onPressed: () { 
-            //_scaffoldKey.currentState.openDrawer();
+            _scaffoldKey.currentState.openDrawer();
           }, 
         ),
         Expanded(
@@ -80,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mini: true,
           heroTag: "add item",
           onPressed: () { 
-            
+            showNovoItemDialog();
           },
         ),
       ],
@@ -89,97 +100,83 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: 100.0,
-            child: Stack(alignment: Alignment.center, children: <Widget>[
-                buildBackgroundAppName(),
-                buildBackgroundAppNameShadow(),
-              ],),
+      child: Container(
+        color: Colors.deepOrange[300],
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 100.0,
+                child: _buildAppName(),
+              ),
+              decoration: BoxDecoration(
+                // color: terciaryColor
+              ),
             ),
-            decoration: BoxDecoration(
-              // color: terciaryColor
+            Divider(),
+            ListTile(
+              leading: Icon(
+                Icons.plus_one,
+                color: Colors.white
+              ),
+              title: Text('Nova Compra', style: TextStyle(color: Colors.white),),
+              onTap: () {
+                Navigator.pop(context);
+                showNovoItemDialog();
+              },
             ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 30, bottom: 30, left: 20, right: 20),
-            alignment: Alignment.center,
-            child: Text(
-              "“Se você almeja ser rico, pense em poupar assim como você pensa em ganhar.” – Benjamin Franklin",
-              //textScaleFactor: 0.9,
-              textAlign: TextAlign.center,
+            ListTile(
+              leading: Icon(
+                Icons.info,
+                color: Colors.white
+              ),
+              title: Text("Histórico", style: TextStyle(color: Colors.white),),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HistoricoScreen()),
+                );
+              },
             ),
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(
-              Icons.plus_one,
-              // color: primaryColor,
+            ListTile(
+              leading: Icon(
+                Icons.star,
+                color: Colors.white
+              ),
+              title: Text("Top 5", style: TextStyle(color: Colors.white),),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TopFiveScreen()),
+                );
+              },
             ),
-            title: Text('Novo Registro'),
-            onTap: () {
-              Navigator.pop(context);
-              // showDialogCustomNovoRegistro();
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.monetization_on,
-              // color: primaryColor,
-            ),
-            title: Text("Minhas Metas"),
-            onTap: () {
-              Navigator.pop(context);
-              // openMinhasMetasDialog();
-            },
-          ),
-          //buildButtonConfig(),
-          ListTile(
-            leading: Icon(
-              Icons.lock,
-              // color: primaryColor,
-            ),
-            title: Text("Politica de Privacidade"),
-            onTap: () {
-              Navigator.pop(context);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
-              // );
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.info,
-              // color: primaryColor,
-            ),
-            title: Text("Sobre"),
-            onTap: () {
-              Navigator.pop(context);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => SobreScreen()),
-              // );
-            },
-          ),
-          Divider(),
-        ],
+            Divider(),
+          ],
+        ),
       ),
     );
   }
 
-  Padding buildBackgroundAppName() {
+  _buildAppName() {
+    return Stack(alignment: Alignment.center, children: <Widget>[
+      _buildBackgroundAppName(),
+      _buildBackgroundAppNameShadow(),
+    ],);
+  }
+
+  _buildBackgroundAppName() {
     return Padding(
       //padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 15.0, ),
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0, ),
       child: Text(
         "Meta Econômica",
         style: TextStyle(
-          // color: primaryColor,
+          color: Colors.deepOrange[900],
           fontSize: 30,
           fontFamily: "Lobster",
           fontWeight: FontWeight.bold,
@@ -188,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Padding buildBackgroundAppNameShadow() {
+  _buildBackgroundAppNameShadow() {
     return Padding(
       //padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 20.0,),
       padding: const EdgeInsets.fromLTRB(7.0, 7.0, 0.0, 0.0,),

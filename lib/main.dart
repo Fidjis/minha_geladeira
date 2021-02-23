@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black
         ),
+        appBarTheme: AppBarTheme(
+          color: Colors.deepOrange[300 ],
+        ),
         // textTheme: TextTheme(
         //   bodyText1: TextStyle(),
         //   bodyText2: TextStyle(),
@@ -24,7 +27,7 @@ class MyApp extends StatelessWidget {
         //   bodyColor: Colors.black, 
         //   displayColor: Colors.black, 
         // ),
-        scaffoldBackgroundColor: Colors.deepOrange,
+        scaffoldBackgroundColor: Colors.deepOrange[300 ],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(),

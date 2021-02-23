@@ -70,7 +70,7 @@ class _FreezerWidgetState extends State<FreezerWidget> {
           color: Colors.white, // Colors.lightBlueAccent,
           child: Container(
             height: MediaQuery.of(context).size.height,
-            child: Padding(padding: EdgeInsets.all(10), child: _builGenericList()),
+            child: Padding(padding: EdgeInsets.all(10), child: Center(child: Image.asset("assets/imgs/frio.png",height: 100.0,),)),
           ),
         ),
       );

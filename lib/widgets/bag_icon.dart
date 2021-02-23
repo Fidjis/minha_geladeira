@@ -20,7 +20,7 @@ class _BagIconState extends State<BagIcon> {
           backgroundColor: Colors.white,
           child: Image.asset( widget.assetUrl)//widget.icon,
         ),
-        widget.quantidade != 0 ? Positioned(
+        widget.quantidade == 0 ? Container(height: 1, width: 1,) : Positioned(
           right: 0,
           top: 0,
           child: new Container(
@@ -42,7 +42,7 @@ class _BagIconState extends State<BagIcon> {
               textAlign: TextAlign.center,
             ),
           ),
-        ) : Container()
+        )
       ],
     ) ;
   }
