@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "392702349966",
+    "project_id": "minha-geladeira",
+    "storage_bucket": "minha-geladeira.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392702349966:android:21011ffb3bea1d9ce4afdf",
+        "android_client_info": {
+          "package_name": "com.fidjis.minha_geladeira"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392702349966-39v893f3on5oqvlg8nl0f9aelrrs3bbs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fidjis.minha_geladeira",
+            "certificate_hash": "ec981b9375ad132c58bc570fa5c90af45aa2cce3"
+          }
+        },
+        {
+          "client_id": "392702349966-1v6sjsv79h392hb0ikaqo67qmp5cmp18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3fmgRrZqffohayn4RVJipOBVg6jnImk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392702349966-1v6sjsv79h392hb0ikaqo67qmp5cmp18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

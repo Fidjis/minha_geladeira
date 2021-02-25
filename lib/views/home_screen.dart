@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:minha_geladeira/helpers/consts.dart';
+import 'package:minha_geladeira/helpers/helper_functions.dart';
 import 'package:minha_geladeira/stores/principal_store.dart';
 import 'package:minha_geladeira/views/historico_screen.dart';
 import 'package:minha_geladeira/views/top_five_screen.dart';
@@ -13,8 +15,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final principalStore = PrincipalSt();
+
+  @override
+  void initState() {
+    super.initState();
+    HelperFunctions.saveUserLoggedInSharedPreference(true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (_) => SafeArea(
         child: Scaffold(
           drawer: _buildDrawer(),
-          key: _scaffoldKey,
+          key: Consts.scaffoldKey,
           body: _buildBody(),
         )
       )
@@ -69,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mini: true,
           heroTag: "open drawer",
           onPressed: () { 
-            _scaffoldKey.currentState.openDrawer();
+            Consts.scaffoldKey.currentState.openDrawer();
           }, 
         ),
         Expanded(
@@ -174,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 15.0, ),
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0, ),
       child: Text(
-        "Meta Econômica",
+        "Minha Geladeira",
         style: TextStyle(
           color: Colors.deepOrange[900],
           fontSize: 30,
@@ -190,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 20.0,),
       padding: const EdgeInsets.fromLTRB(7.0, 7.0, 0.0, 0.0,),
       child: Text(
-        "Meta Econômica",
+        "Minha Geladeira",
         style: TextStyle(
           color: Colors.white,
           fontSize: 30,

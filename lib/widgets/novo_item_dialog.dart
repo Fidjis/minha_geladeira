@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:minha_geladeira/helpers/consts.dart';
+import 'package:minha_geladeira/models/freezer_item_model.dart';
+import 'package:minha_geladeira/services/database.dart';
 
 class NovoItemDialog extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class _NovoItemDialogState extends State<NovoItemDialog> {
   final produtoInputController = TextEditingController();
   final qntInputController = TextEditingController();
   String _selectedItem = Consts.TIPOITENS[0];
+  bool _ficaNoCongelador = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +30,23 @@ class _NovoItemDialogState extends State<NovoItemDialog> {
         child: dialogContent(context),
       ),
     );
+  }
+
+  void showInSnackBar(String value) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    Consts.scaffoldKey.currentState?.removeCurrentSnackBar();
+    Consts.scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(
+        value,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontFamily: "WorkSansSemiBold"),
+      ),
+      backgroundColor: const Color(0xFFe89b98),
+      duration: Duration(milliseconds: 1500),
+    ));
   }
 
   dialogContent(BuildContext context) {
@@ -110,6 +131,17 @@ class _NovoItemDialogState extends State<NovoItemDialog> {
                     ),
                   ],
                 ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Text('Fica no congelador?', textScaleFactor: 1.2,),
+                    SizedBox(height: 16.0),
+                    Checkbox(
+                      value: _ficaNoCongelador,
+                      onChanged: (val) => setState(()=> _ficaNoCongelador = val)
+                    )
+                  ],
+                ),
                 SizedBox(height: 50.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -141,7 +173,18 @@ class _NovoItemDialogState extends State<NovoItemDialog> {
                             },
                           );
                         else{
-                          //salvarrrrr
+                          new DatabaseMethods().addItem(
+                            item: new FreezerItemModel(
+                              nome: produtoInputController.text, 
+                              quantidade: int.parse(qntInputController.text), 
+                              tipo: _selectedItem,
+                              congelador: _ficaNoCongelador,
+                            ), 
+                            userID: Consts.userId
+                          ).then((result) => {
+                             showInSnackBar('Adicionado!'),
+                             Navigator.pop(context)
+                          }).catchError((err) => showInSnackBar('Erro!'));
                         }
                       },
                       child: Text("Salvar"),

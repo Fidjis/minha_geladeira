@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:minha_geladeira/helpers/consts.dart';
+import 'package:minha_geladeira/helpers/helper_functions.dart';
 import 'package:minha_geladeira/models/freezer_item_model.dart';
+import 'package:minha_geladeira/models/historico_item_model.dart';
+import 'package:minha_geladeira/services/database.dart';
 import 'package:minha_geladeira/widgets/bag_icon.dart';
 
 class FreezerItemWidget extends StatefulWidget {
@@ -28,7 +33,7 @@ class _FreezerItemWidgetState extends State<FreezerItemWidget> {
           // subtitle: Text('Qtd 4'),
         ),
         leading: BagIcon(
-          assetUrl: "assets/imgs/chapeu.png", 
+          assetUrl: HelperFunctions.getImgTipo(widget.freezerItemModel.tipo), 
           quantidade: widget.freezerItemModel.quantidade,
         ),
         children: <Widget>[
@@ -72,6 +77,7 @@ class _FreezerItemWidgetState extends State<FreezerItemWidget> {
 
   consumirProdutoDiolog(BuildContext context, bool comer) {
     final formKey = GlobalKey<FormState>();
+    int qtdConsumida = 0;
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -93,6 +99,7 @@ class _FreezerItemWidgetState extends State<FreezerItemWidget> {
                       if (int.parse(value) > widget.freezerItemModel.quantidade) 
                         return 'Você tem apenas: ' + widget.freezerItemModel.quantidade.toString();
                   },
+                  onSaved: (val) => qtdConsumida = int.parse(val),
                   maxLength: 2, 
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
@@ -116,7 +123,23 @@ class _FreezerItemWidgetState extends State<FreezerItemWidget> {
               child: new Text("Salvar"),
               onPressed: () {
                 if (formKey.currentState.validate()) {
-                  print('SALVO');
+                  formKey.currentState.save();
+                  new DatabaseMethods().consumirItem(
+                    itemID: widget.freezerItemModel.id, 
+                    quantidade: widget.freezerItemModel.quantidade - qtdConsumida, 
+                    userID: Consts.userId
+                  );
+                  HistoricoItemModel h = new HistoricoItemModel(
+                    msg: comer ? "Consumiu" : "Utilizou", 
+                    nome: widget.freezerItemModel.nome, 
+                    quantidade: qtdConsumida, 
+                    data: DateTime.now().millisecondsSinceEpoch, tipo: widget.freezerItemModel.tipo
+                  );
+                  new DatabaseMethods().addHistorico(
+                    item: h, 
+                    userID: Consts.userId
+                  );
+                  Navigator.pop(context);
                 }
               },
             ),

@@ -1,12 +1,38 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:minha_geladeira/views/home_screen.dart';
+import 'package:minha_geladeira/views/login_screen.dart';
+
+import 'helpers/helper_functions.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  bool userIsLoggedIn;
+
+  @override
+  void initState() {
+    getLoggedInState();
+    super.initState();
+  }
+
+  getLoggedInState() async {
+    await Firebase.initializeApp();
+    await HelperFunctions.getUserLoggedInSharedPreference().then((value){
+      setState(() {
+        userIsLoggedIn  = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,17 +46,24 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           color: Colors.deepOrange[300 ],
         ),
-        // textTheme: TextTheme(
-        //   bodyText1: TextStyle(),
-        //   bodyText2: TextStyle(),
-        // ).apply(
-        //   bodyColor: Colors.black, 
-        //   displayColor: Colors.black, 
-        // ),
         scaffoldBackgroundColor: Colors.deepOrange[300 ],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(),
+      home: FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) 
+            return Center(child: Text('ERRO'));
+    
+          if (snapshot.connectionState == ConnectionState.done)
+            return  userIsLoggedIn != null ? userIsLoggedIn ? HomeScreen() : LoginScreen() : LoginScreen();
+
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return CircularProgressIndicator();
+          
+          return CircularProgressIndicator();
+        }
+      ),
     );
   }
 }

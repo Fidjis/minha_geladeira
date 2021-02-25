@@ -31,6 +31,10 @@ dependencies:
   flutter_launcher_icons: "^0.7.3"
   mobx: ^1.2.1+4
   flutter_mobx: ^1.1.0+2
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
+  cloud_firestore: ^0.16.0+1
+  shared_preferences: ^0.5.12+4
 
 flutter_icons:
   ios: true
@@ -62,6 +66,13 @@ flutter:
     - assets/imgs/chapeu.png
     - assets/imgs/comer.png
     - assets/imgs/frio.png
+    - assets/imgs/carne.png
+    - assets/imgs/doce.png
+    - assets/imgs/drink_a.png
+    - assets/imgs/drink_s.png
+    - assets/imgs/frutas.png
+    - assets/imgs/laticinios.png
+    - assets/imgs/outros.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
