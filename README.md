@@ -2,6 +2,10 @@
 
 Projeto feito em Flutter, com conceitos de clean code, clean architecture, persistência com Firebase Firestore e gerência de estado utilizando MobX
 
+Link PlayStore? (Ate 3 dias uteis para o google aprovar (28/02))
+  - https://play.google.com/store/apps/details?id=com.fidjis.minha_geladeira
+
+
 ## Proposta
 
 Aplicativo para gerenciar os itens disponíveis na geladeira e monitorar o consumo.
